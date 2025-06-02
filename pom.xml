@@ -123,6 +123,10 @@
         </includes>
         <filtering>false</filtering>
       </resource>
+      <resource>
+    <directory>src/main/resources/META-INF/resources</directory>
+    <targetPath>META-INF/resources</targetPath>
+  </resource>
     </resources>
     <plugins>
       <!-- 컴파일러 플러그인 -->
