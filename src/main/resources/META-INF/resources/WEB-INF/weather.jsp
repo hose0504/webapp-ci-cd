@@ -8,108 +8,109 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TEAM5 날씨 게시판</title>
-    <style>
+     <style>
+        /* Font & Box-reset */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Noto Sans KR', 'Malgun Gothic', sans-serif;
+            font-family: 'Malgun Gothic', sans-serif;
         }
-        
+
+        /* Body background: Gros Michel 스타일 그라데이션 */
         body {
-            background-color: #f5f6f7;
+            background: linear-gradient(135deg, #fffef7 0%, #fefcf0 50%, #fdf8e1 100%);
+            min-height: 100vh;
             color: #222;
         }
-        
+
         .container {
             width: 100%;
             max-width: 1100px;
             margin: 0 auto;
             padding: 0 20px;
+            position: relative;
+            z-index: 1;
         }
-        
+
+        /* Header: 노란색 그라데이션 */
         header {
-            background-color: #03c75a;
-            padding: 12px 0;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            background: linear-gradient(135deg, #f4e04d, #f7e83b);
+            padding: 15px 0;
+            box-shadow: 0 2px 10px rgba(244, 224, 77, 0.3);
             position: relative;
         }
         
         .logo {
-            font-size: 22px;
+            color: #8b6914;
+            font-size: 24px;
             font-weight: bold;
             text-align: center;
-            color: white;
         }
 
+        /* 뒤로가기 버튼 */
         .back-btn {
             position: absolute;
             left: 20px;
             top: 50%;
             transform: translateY(-50%);
             background-color: white;
-            color: #03c75a;
-            border: 1px solid #03c75a;
+            color: #8b6914;
+            border: 1px solid #8b6914;
             padding: 8px 16px;
             font-size: 14px;
             font-weight: bold;
             border-radius: 4px;
             cursor: pointer;
+            transition: all 0.2s;
         }
-
         .back-btn:hover {
             background-color: #f5f5f5;
         }
-        
+
+        /* Navigation bar: 반투명 흰 배경 + 블러 */
         .nav {
-            background-color: white;
-            border-bottom: 1px solid #e5e5e5;
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(5px);
+            padding: 10px 20px;
+            box-shadow: 0 2px 8px rgba(244, 224, 77, 0.2);
         }
-        
         .nav .container {
             display: flex;
             justify-content: center;
             align-items: center;
-            padding: 0;
         }
-        
         .nav-links {
             display: flex;
             list-style: none;
+            margin: 0 auto;
         }
-        
         .nav-links li {
-            margin: 0;
+            margin: 0 20px;
         }
-        
         .nav-links a {
-            display: block;
             text-decoration: none;
-            color: #333;
+            color: #8b6914;
             font-size: 15px;
-            padding: 14px 20px;
+            font-weight: 500;
             position: relative;
         }
-        
-        .nav-links a:hover {
-            color: #03c75a;
-        }
-        
+        .nav-links a:hover,
         .nav-links a.active {
-            color: #03c75a;
+            color: #c49a1a;
             font-weight: bold;
         }
-        
         .nav-links a.active:after {
             content: '';
             position: absolute;
-            bottom: 0;
+            bottom: -2px;
             left: 0;
             width: 100%;
             height: 3px;
-            background-color: #03c75a;
+            background-color: #c49a1a;
         }
-        
+
+        /* 날씨 카드 및 게시판 스타일 공통 */
         .weather-container {
             margin: 30px 0;
             display: flex;
@@ -117,54 +118,53 @@
             gap: 20px;
             justify-content: center;
         }
-        
         .weather-card {
-            background-color: white;
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(8px);
             border-radius: 8px;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+            box-shadow: 0 4px 15px rgba(244, 224, 77, 0.15);
             padding: 20px;
             text-align: center;
             width: 48%;
+            border: 1px solid rgba(244, 224, 77, 0.2);
         }
-        
         @media (max-width: 768px) {
             .weather-card {
                 width: 100%;
             }
         }
-        
         .weather-card h2 {
-            color: #333;
+            color: #8b6914;
             margin-bottom: 15px;
             font-size: 18px;
             padding-bottom: 10px;
             border-bottom: 1px solid #f0f0f0;
         }
-        
         .weather-icon {
             font-size: 60px;
             margin: 10px 0;
         }
-        
         .temp {
             font-size: 36px;
             font-weight: bold;
             margin: 10px 0;
+            color: #8b6914;
         }
-        
         .details {
             color: #666;
             line-height: 1.6;
         }
-        
+
+        /* 게시판 영역 */
         .board {
-            background-color: white;
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(8px);
             border-radius: 8px;
-            box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+            box-shadow: 0 4px 15px rgba(244, 224, 77, 0.15);
             padding: 20px;
             margin-bottom: 30px;
+            border: 1px solid rgba(244, 224, 77, 0.2);
         }
-        
         .board-header {
             display: flex;
             justify-content: space-between;
@@ -173,28 +173,30 @@
             padding-bottom: 15px;
             border-bottom: 1px solid #eee;
         }
-        
         .board-title {
             font-size: 20px;
             font-weight: bold;
-            color: #333;
+            color: #8b6914;
         }
-        
         .write-btn {
-            background-color: #03c75a;
-            color: white;
+            background: linear-gradient(135deg, #f4e04d, #f7e83b);
+            color: #8b6914;
             border: none;
             padding: 8px 16px;
             border-radius: 4px;
             font-weight: bold;
             cursor: pointer;
             font-size: 14px;
+            transition: all 0.2s;
         }
-        
+        .write-btn:hover {
+            background: linear-gradient(135deg, #f7e83b, #f4e04d);
+        }
+
         .search-container {
             margin: 20px 0;
+            text-align: center;
         }
-        
         .search-input {
             width: 300px;
             padding: 10px;
@@ -202,48 +204,48 @@
             border-radius: 4px;
             font-size: 14px;
         }
-        
         .search-btn {
-            background-color: #03c75a;
-            color: white;
+            background: linear-gradient(135deg, #f4e04d, #f7e83b);
+            color: #8b6914;
             border: none;
             padding: 10px 20px;
             border-radius: 4px;
             margin-left: 5px;
             cursor: pointer;
             font-weight: bold;
+            transition: all 0.2s;
         }
-        
+        .search-btn:hover {
+            background: linear-gradient(135deg, #f7e83b, #f4e04d);
+        }
+
         table {
             width: 100%;
             border-collapse: collapse;
             margin: 20px 0;
         }
-        
         thead th {
-            background-color: #f9f9f9;
+            background: rgba(255, 254, 247, 0.8);
             padding: 12px;
             border-top: 1px solid #ddd;
             border-bottom: 1px solid #ddd;
-            color: #333;
+            color: #8b6914;
             font-size: 14px;
         }
-        
         tbody td {
             padding: 14px 12px;
             border-bottom: 1px solid #eee;
             color: #555;
             font-size: 14px;
         }
-        
         tbody tr:hover {
-            background-color: #f9f9f9;
+            background-color: #fefcf0;
         }
-        
+
         .pagination {
             margin: 30px 0 10px;
+            text-align: center;
         }
-        
         .pagination a {
             display: inline-block;
             padding: 6px 12px;
@@ -252,69 +254,48 @@
             text-decoration: none;
             border: 1px solid #ddd;
             border-radius: 4px;
-        }
-        
-        .pagination a.active {
-            background-color: #03c75a;
-            color: white;
-            border-color: #03c75a;
-        }
-        
-        .pagination a:hover:not(.active) {
-            background-color: #f5f5f5;
-        }
-        
-        .back-btn {
-            background-color: white;
-            color: #03c75a;
-            border: 1px solid #03c75a;
-            padding: 10px 20px;
-            font-size: 14px;
-            font-weight: bold;
-            border-radius: 4px;
-            cursor: pointer;
             transition: all 0.2s;
         }
-        
-        .back-btn:hover {
-            background-color: #f5f5f5;
+        .pagination a.active {
+            background: linear-gradient(135deg, #f4e04d, #f7e83b);
+            color: #8b6914;
+            border-color: #f7e83b;
         }
-        
-        /* 주간 날씨 테이블 스타일 */
+        .pagination a:hover:not(.active) {
+            background-color: #fefcf0;
+        }
+
+        /* 주간 예보 테이블 스타일 */
         .weekly-forecast {
             width: 100%;
             border-collapse: collapse;
             margin-top: 10px;
         }
-        
         .weekly-forecast tr {
             border-bottom: 1px solid #f0f0f0;
         }
-        
         .weekly-forecast tr:last-child {
             border-bottom: none;
         }
-        
         .weekly-forecast td {
             padding: 12px 8px;
             text-align: center;
             font-size: 14px;
+            color: #8b6914;
         }
-        
         .weekly-forecast td:first-child {
             font-weight: bold;
-            color: #333;
+            color: #8b6914;
         }
-        
         .weather-emoji {
             font-size: 24px;
             margin: 5px 0;
         }
-        
+
         /* 알림 배너 */
         .alert-banner {
-            background-color: #f8f8f8;
-            border: 1px solid #eaeaea;
+            background: rgba(255, 254, 247, 0.8);
+            border: 1px solid #f4e04d;
             border-radius: 8px;
             padding: 12px 20px;
             margin: 20px 0;
@@ -322,18 +303,25 @@
             align-items: center;
             justify-content: space-between;
         }
-        
         .alert-banner p {
-            color: #666;
+            color: #8b6914;
             font-size: 14px;
         }
-        
         .alert-banner button {
             background: none;
             border: none;
-            color: #03c75a;
+            color: #c49a1a;
             font-weight: bold;
             cursor: pointer;
+        }
+
+        /* Footer */
+        footer {
+            background: linear-gradient(135deg, #8b6914, #c49a1a);
+            color: white;
+            padding: 15px 0;
+            text-align: center;
+            margin-top: 20px;
         }
     </style>
 </head>

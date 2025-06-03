@@ -84,16 +84,10 @@
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-tomcat</artifactId>
-      <scope>provided</scope>
     </dependency>
     <dependency>
       <groupId>com.amazonaws</groupId>
       <artifactId>aws-java-sdk-lambda</artifactId>
-      <version>1.12.660</version>
-    </dependency>
-    <dependency>
-      <groupId>com.amazonaws</groupId>
-      <artifactId>aws-java-sdk-rekognition</artifactId>
       <version>1.12.660</version>
     </dependency>
     <dependency>
@@ -144,14 +138,6 @@
       <plugin>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-maven-plugin</artifactId>
-        <version>3.2.6</version>
-        <executions>
-          <execution>
-            <goals>
-              <goal>repackage</goal>
-            </goals>
-          </execution>
-        </executions>
       </plugin>
 
       <!-- Docker Jib 플러그인 -->
@@ -161,7 +147,7 @@
         <version>3.4.5</version>
         <configuration>
           <to>
-            <image>docker.io/jwh0722/boot</image>
+            <image>docker.io/jwh0722/web_v1</image>
             <tags>
               <tag>1.4</tag>
               <tag>latest</tag>
