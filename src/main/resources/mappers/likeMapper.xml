@@ -6,11 +6,7 @@
 <mapper namespace="com.example.jsonExam.community.like.LikeMapper">
 
     <!-- 좋아요 추가 -->
-    <insert id="likePost" parameterType="com.example.jsonExam.community.like.LikeDTO">
-        INSERT INTO post_likes (post_id, ip_address)
-        VALUES (#{postId}, #{ip})
-    </insert>
-
+    
     <!-- 좋아요 취소 -->
     <delete id="unlikePost" parameterType="com.example.jsonExam.community.like.LikeDTO">
         DELETE FROM post_likes

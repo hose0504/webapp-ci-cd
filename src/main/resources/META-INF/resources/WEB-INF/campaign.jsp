@@ -1,5 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>    
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -246,146 +248,153 @@
     </style>
 </head>
 <body>
-    <div class="floating-bananas" id="floatingBananas"></div>
-    
-    <div class="container">
-        <div class="campaign-card">
-            <div class="header">
-                <h1 class="title">🍌 바나나 러브 캠페인</h1>
-                <p class="subtitle">건강한 바나나로 더 나은 세상을 만들어요!</p>
-                <div class="participants-counter">
-                    👥 현재 참여자: <span id="participantCount">0</span>명
-                </div>
-            </div>
+  <!-- 서버에서 컨텍스트 경로 가져와서 JS 변수에 할당 -->
+  <script>
+    const ctx = '${pageContext.request.contextPath}';
+  </script>
 
-            <form class="login-form" id="campaignForm">
-                <div class="form-group">
-                    <label class="form-label" for="username">🆔 아이디</label>
-                    <input type="text" id="username" class="form-input" placeholder="아이디를 입력하세요" required>
-                </div>
+  <!-- 배경 애니메이션용 바나나들 -->
+  <div class="floating-bananas" id="floatingBananas"></div>
 
-                <button type="submit" class="submit-btn">
-                    🍌 캠페인 참여하기 🍌
-                </button>
-            </form>
+  <!-- 실제 폼(전송은 JS fetch로 처리) -->
+  <form id="campaignForm">
+    <input type="hidden" name="username" id="h_username" />
+  </form>
 
-            <div class="success-message" id="successMessage">
-                🎉 축하합니다! 바나나 러브 캠페인에 성공적으로 참여하셨습니다! 🎉
-            </div>
-
-            <div class="campaign-info">
-                <h3>🌟 캠페인 목표</h3>
-                <p>📈 목표 참여자: 5,000명</p>
-                <div class="progress-bar">
-                    <div class="progress-fill" id="progressFill"></div>
-                </div>
-                <p id="progressText">현재 24.9% 달성!</p>
-                
-                <h3 style="margin-top: 20px;">🎁 참여 혜택</h3>
-                <p>• 바나나 건강 가이드북 무료 제공</p>
-                <p>• 월간 바나나 레시피 뉴스레터</p>
-                <p>• 바나나 농장 견학 이벤트 우선 참여</p>
-                <p>• 친환경 바나나 할인 쿠폰</p>
-            </div>
+  <div class="container">
+    <div class="campaign-card">
+      <!-- 헤더 -->
+      <div class="header">
+        <h1 class="title">🍌 바나나 러브 캠페인</h1>
+        <p class="subtitle">건강한 바나나로 더 나은 세상을 만들어요!</p>
+        <div class="participants-counter">
+          👥 현재 참여자: <span id="participantCount">0</span>명
         </div>
+      </div>
+
+      <!-- 참여 폼 -->
+      <div class="login-form" id="formContainer">
+        <div class="form-group">
+          <label class="form-label" for="username">🆔 아이디</label>
+          <input type="text"
+                 id="username"
+                 class="form-input"
+                 placeholder="아이디를 입력하세요"
+                 required>
+        </div>
+        <button type="button" class="submit-btn" onclick="joinCampaign();">🍌 캠페인 참여하기 🍌</button>
+      </div>
+
+      <!-- 참여 완료 메시지 (처음엔 숨김) -->
+      <div class="success-message" id="successMessage">
+        🎉 참여가 완료되었습니다! 🎉
+      </div>
+
+      <!-- 캠페인 정보 -->
+      <div class="campaign-info">
+        <h3>🌟 캠페인 목표</h3>
+        <p>📈 목표 참여자: 5,000명</p>
+        <div class="progress-bar">
+          <div class="progress-fill" id="progressFill"></div>
+        </div>
+        <p id="progressText">현재 0.0% 달성!</p>
+
+        <h3 style="margin-top: 20px;">🎁 참여 혜택</h3>
+        <p>• 바나나 건강 가이드북 무료 제공</p>
+        <p>• 월간 바나나 레시피 뉴스레터</p>
+        <p>• 바나나 농장 견학 이벤트 우선 참여</p>
+        <p>• 친환경 바나나 할인 쿠폰</p>
+      </div>
     </div>
+  </div>
 
-    <script>
-        // 참여자 수 관리
-        let participantCount = 0;
-        const participantElement = document.getElementById('participantCount');
-        const progressFill = document.getElementById('progressFill');
-        const progressText = document.getElementById('progressText');
-
-        // 배경 바나나 애니메이션 생성
-        function createFloatingBananas() {
-            const container = document.getElementById('floatingBananas');
-            for (let i = 0; i < 15; i++) {
-                const banana = document.createElement('div');
-                banana.className = 'banana';
-                banana.innerHTML = '🍌';
-                banana.style.left = Math.random() * 100 + '%';
-                banana.style.top = Math.random() * 100 + '%';
-                banana.style.animationDelay = Math.random() * 6 + 's';
-                banana.style.animationDuration = (4 + Math.random() * 4) + 's';
-                container.appendChild(banana);
-            }
-        }
-
-        // 진행률 업데이트 함수
-        function updateProgress() {
-            const percentage = (participantCount / 5000) * 100;
-            progressFill.style.width = percentage + '%';
-            progressText.textContent = `현재 ${percentage.toFixed(1)}% 달성!`;
-        }
-
-        // 참여자 수 실시간 증가 (3-8초마다)
-        function startParticipantCounter() {
-            // 자동 증가 기능 비활성화 - 수동으로만 증가
-        }
-
-        // 폼 제출 처리
-        document.getElementById('campaignForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            const username = document.getElementById('username').value;
-            
-            if (username) {
-                // 참여자 수 증가
-                participantCount += 1;
-                participantElement.textContent = participantCount.toLocaleString();
-                updateProgress();
-                
-                // 성공 메시지 표시
-                const successMessage = document.getElementById('successMessage');
-                successMessage.style.display = 'block';
-                successMessage.innerHTML = `🎉 ${username}님, 바나나 러브 캠페인에 성공적으로 참여하셨습니다! 🎉`;
-                
-                // 폼 숨기기
-                this.style.display = 'none';
-                
-                // 축하 효과
-                document.body.style.animation = 'none';
-                setTimeout(() => {
-                    document.body.style.animation = '';
-                }, 100);
-            }
-        });
-
-        // 입력 필드 애니메이션
-        document.querySelectorAll('.form-input').forEach(input => {
-            input.addEventListener('focus', function() {
-                this.parentElement.querySelector('.form-label').style.color = '#FF6B35';
-            });
-            
-            input.addEventListener('blur', function() {
-                this.parentElement.querySelector('.form-label').style.color = '#333';
-            });
-        });
-
-        // 초기화
-        createFloatingBananas();
-        startParticipantCounter();
-        updateProgress();
-
-        // 페이지 로드 애니메이션
-        window.addEventListener('load', function() {
-            document.querySelector('.campaign-card').style.opacity = '0';
-            document.querySelector('.campaign-card').style.transform = 'translateY(50px)';
-            
-            setTimeout(() => {
-                document.querySelector('.campaign-card').style.transition = 'all 0.8s ease-out';
-                document.querySelector('.campaign-card').style.opacity = '1';
-                document.querySelector('.campaign-card').style.transform = 'translateY(0)';
-            }, 100);
-        });
-    </script>
-    <div style="margin-top: 30px; text-align: center;">
-    <button onclick="location.href='/template'" 
-            style="padding: 12px 24px; font-size: 1.1rem; background: #FF6B35; color: white; border: none; border-radius: 30px; cursor: pointer; font-weight: bold;">
-        ⬅️ 메인으로 돌아가기
+  <!-- 메인으로 돌아가기 버튼 -->
+  <div style="margin-top: 30px; text-align: center;">
+    <button onclick="location.href='${pageContext.request.contextPath}/template'"
+            style="padding: 12px 24px; font-size: 1.1rem;
+                   background: #FF6B35; color: white;
+                   border: none; border-radius: 30px;
+                   cursor: pointer; font-weight: bold;">
+      ⬅️ 메인으로 돌아가기
     </button>
-</div>
-    
+  </div>
+
+  <script>
+    // 서버에서 내려줄 totalCount를 EL로 삽입 (null 체크 포함)
+    let totalCount = ${totalCount == null ? 0 : totalCount};
+
+    // DOM 로드 시, 초기 진행률 업데이트 및 바나나 애니메이션 생성
+    document.addEventListener('DOMContentLoaded', () => {
+      updateProgress(totalCount);
+      createFloatingBananas();
+    });
+
+    // 진행률 업데이트 함수
+    function updateProgress(total) {
+      const percentage = (total / 5000) * 100;
+      document.getElementById('progressFill').style.width = percentage + '%';
+      document.getElementById('progressText').textContent = `현재 ${percentage.toFixed(1)}% 달성!`;
+      document.getElementById('participantCount').textContent = total.toLocaleString() + '명';
+    }
+
+    // 캠페인 참여 요청 (AJAX)
+    async function joinCampaign() {
+      const usernameInput = document.getElementById('username');
+      const username = usernameInput.value.trim();
+      if (!username) {
+        alert('아이디를 입력해주세요.');
+        return;
+      }
+
+      // 비활성화해서 중복 클릭 방지
+      usernameInput.disabled = true;
+      document.querySelector('.submit-btn').disabled = true;
+
+      // 숨겨진 필드에 username 세팅
+      document.getElementById('h_username').value = username;
+      const formElement = document.getElementById('campaignForm');
+      const formData = new FormData(formElement);
+
+      try {
+        // ctx에는 예: '/project1' (서버의 컨텍스트 경로)가 들어 있음
+        const baseUrl = window.location.origin + ctx;
+        const resp = await fetch("/campaign/join", {
+        	  method: "POST",
+        	  body: formData
+        	});
+        if (!resp.ok) throw new Error(`응답 실패: ${resp.status}`);
+
+        // 서버가 성공적으로 저장했다고 가정
+        totalCount++;
+        updateProgress(totalCount);
+
+        // 폼 숨기고 완료 메시지 표시
+        document.getElementById('formContainer').style.display = 'none';
+        const msgDiv = document.getElementById('successMessage');
+        msgDiv.style.display = 'block';
+
+      } catch (err) {
+        alert('참여 처리 중 오류가 발생했습니다.\n' + err.message);
+        // 실패 시 다시 활성화
+        usernameInput.disabled = false;
+        document.querySelector('.submit-btn').disabled = false;
+      }
+    }
+
+    // 배경 바나나 애니메이션 생성
+    function createFloatingBananas() {
+      const container = document.getElementById('floatingBananas');
+      for (let i = 0; i < 15; i++) {
+        const banana = document.createElement('div');
+        banana.className = 'banana';
+        banana.innerHTML = '🍌';
+        banana.style.left = Math.random() * 100 + '%';
+        banana.style.top  = Math.random() * 100 + '%';
+        banana.style.animationDelay    = Math.random() * 6 + 's';
+        banana.style.animationDuration = (4 + Math.random() * 4) + 's';
+        container.appendChild(banana);
+      }
+    }
+  </script>
 </body>
 </html>

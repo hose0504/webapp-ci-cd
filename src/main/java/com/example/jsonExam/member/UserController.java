@@ -24,7 +24,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 // Controller Layer
 @Controller
-@RequestMapping("/member")
 public class UserController {
     @Autowired private UserService userService;
     @Autowired private HttpSession session;
@@ -40,9 +39,9 @@ public class UserController {
         ra.addFlashAttribute("msg", msg);
 
         if (msg.equals("회원가입 성공!")) {
-            return "redirect:http://www.team5.click/project1/login"; // 로그인 페이지로 이동
+            return "redirect:/login"; // 로그인 페이지로 이동
         }
-        return "redirect:http://www.team5.click/project1/template"; // 실패하면 다시 회원가입 폼으로 이동
+        return "redirect:/template"; // 실패하면 다시 회원가입 폼으로 이동
     }
     
     

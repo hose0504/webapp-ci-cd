@@ -246,17 +246,16 @@
     <div class="container">
         <div class="empty-space"></div>
         <ul class="nav-links">
-            <li><a href="template" onclick="showSection('home')"><spring:message code="nav.home"/></a></li>
-            <li><a href="community" onclick="showSection('community')"><spring:message code="nav.community"/></a></li>
-            <li><a href="weather" onclick="showSection('weather')"><spring:message code="nav.weather"/></a></li>            
-            <li><a href="fortune"><spring:message code="nav.fortune"/></a></li>
-            <li><a href="campaign"><spring:message code="nav.campaign"/></a></li>
-            <li><a href="information"><spring:message code="nav.information"/></a></li>
-            <li><a href="shop"><spring:message code="nav.shop"/></a></li>
-        </ul>
-        <a href="login" class="login-link" onclick="return login()"><spring:message code="login"/></a>
-        <button onclick="location.href='http://www.team5.click/project1/Mypage'"><spring:message code="nav.mypage"/></button>
-    </div>
+  <li><a href="template" onclick="showSection('home')">Home</a></li>
+  <li><a href="community" onclick="showSection('community')">Community</a></li>
+  <li><a href="weather" onclick="showSection('weather')">Weather</a></li>
+  <li><a href="fortune">Fortune</a></li>
+  <li><a href="campaign">Campaign</a></li>
+  <li><a href="information">Information</a></li>
+  <li><a href="shop">Shop</a></li>
+</ul>
+<a href="login" class="login-link" onclick="return login()">Login</a>
+<button onclick="location.href='http://www.team5.click/project1/Mypage'">My Page</button>
 </nav>
 
 <div class="container">
@@ -316,7 +315,7 @@
   <c:otherwise>
     <div class="welcome-box">
       <h3>안녕하세요, <strong>${sessionScope.id}</strong>님!</h3>
-      <form action="${pageContext.request.contextPath}/member/logout" method="get">
+      <form action="${pageContext.request.contextPath}/logout" method="get">
         <button type="submit">
           <spring:message code="logout"/>
         </button>
