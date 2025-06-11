@@ -114,14 +114,14 @@
         <directory>src/main/resources</directory>
         <includes>
           <include>**/*.properties</include>
-           <include>**/*.xml</include> 
+          <include>**/*.xml</include>
         </includes>
         <filtering>false</filtering>
       </resource>
       <resource>
-    <directory>src/main/resources/META-INF/resources</directory>
-    <targetPath>META-INF/resources</targetPath>
-  </resource>
+        <directory>src/main/resources/META-INF/resources</directory>
+        <targetPath>META-INF/resources</targetPath>
+      </resource>
     </resources>
     <plugins>
       <!-- 컴파일러 플러그인 -->
@@ -135,10 +135,13 @@
         </configuration>
       </plugin>
 
-      <!-- Spring Boot 플러그인 -->
+      <!-- Spring Boot 플러그인 (mainClass 명시) -->
       <plugin>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-maven-plugin</artifactId>
+        <configuration>
+          <mainClass>com.example.jsonExam.ProjectTeam5Application</mainClass>
+        </configuration>
       </plugin>
 
       <!-- Docker Jib 플러그인 -->
